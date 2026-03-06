@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 // icons
-import { BsFilePdf } from "react-icons/bs";
+import { BsFilePdf, BsSubscript, BsSuperscript } from "react-icons/bs";
 import {
   BoldIcon,
   FileIcon,
@@ -12,16 +13,19 @@ import {
   FilePenIcon,
   FilePlusIcon,
   FileTextIcon,
+  FileType2Icon,
   GlobeIcon,
   ItalicIcon,
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
+  SearchIcon,
   StrikethroughIcon,
   TextIcon,
   TrashIcon,
   UnderlineIcon,
   Undo2Icon,
+  UploadIcon,
 } from "lucide-react";
 
 import { RenameDialog } from "@/components/rename-dialog";
@@ -38,6 +42,17 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+
 import { Avatars } from "./avatars";
 
 import { DocumentInput } from "./document-input";
@@ -50,6 +65,8 @@ import { api } from "../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { RemoveDialog } from "@/components/remove-dialog";
+import { useImageUpload } from "@/hooks/use-image-upload";
+import { ImageDialog } from "./img-dialog";
 
 interface NavbarProps {
   data: Doc<"documents">;
@@ -59,17 +76,24 @@ export const Navbar = ({ data }: NavbarProps) => {
   const router = useRouter();
   const { editor } = useEditorStore();
 
+  const { handleUpload } = useImageUpload();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [customTableOpen, setCustomTableOpen] = useState(false);
+  const [customRows, setCustomRows] = useState("3");
+  const [customCols, setCustomCols] = useState("3");
+
   const mutation = useMutation(api.documents.create);
   const onNewDocument = () => {
     mutation({
       title: "Untitled Document",
       initialContent: "",
     })
-      .catch(() => toast.error("Something went wrong"))
       .then((id) => {
         toast.success("Document created");
         router.push(`/documents/${id}`);
-      });
+      })
+      .catch(() => toast.error("Something went wrong"));
   };
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
@@ -86,6 +110,7 @@ export const Navbar = ({ data }: NavbarProps) => {
     a.href = url;
     a.download = filename;
     a.click();
+    URL.revokeObjectURL(url);
   };
 
   const onSaveJson = () => {
@@ -116,6 +141,54 @@ export const Navbar = ({ data }: NavbarProps) => {
       type: "text/plain",
     });
     onDownload(blob, `${data.title}.txt`);
+  };
+
+  const onSaveWord = () => {
+    if (!editor) return;
+
+    const html = editor.getHTML();
+
+    // Basic inline styles so the Word document looks reasonable out of the box
+    const styles = `
+      <style>
+        body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; margin: 1in; }
+        h1 { font-size: 20pt; font-weight: bold; }
+        h2 { font-size: 16pt; font-weight: bold; }
+        h3 { font-size: 14pt; font-weight: bold; }
+        table { border-collapse: collapse; width: 100%; }
+        td, th { border: 1px solid #000; padding: 4px 8px; }
+        th { background-color: #c7c7c7; font-weight: bold; }
+        ul { list-style-type: disc; }
+        ol { list-style-type: decimal; }
+      </style>
+    `;
+
+    const wordHtml = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office"
+            xmlns:w="urn:schemas-microsoft-com:office:word"
+            xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+          <meta charset="utf-8">
+          <title>${data.title}</title>
+          <!--[if gte mso 9]>
+            <xml>
+              <w:WordDocument>
+                <w:View>Print</w:View>
+                <w:Zoom>100</w:Zoom>
+              </w:WordDocument>
+            </xml>
+          <![endif]-->
+          ${styles}
+        </head>
+        <body>${html}</body>
+      </html>
+    `;
+
+    // BOM prefix ensures Word reads UTF-8 correctly
+    onDownload(
+      new Blob(["﻿", wordHtml], { type: "application/msword" }),
+      `${data.title}.doc`,
+    );
   };
 
   return (
@@ -153,6 +226,10 @@ export const Navbar = ({ data }: NavbarProps) => {
                       <MenubarItem onClick={onSaveText}>
                         <FileTextIcon className="size-4 mr-2" />
                         Text
+                      </MenubarItem>
+                      <MenubarItem onClick={onSaveWord}>
+                        <FileType2Icon className="size-4 mr-2" />
+                        Word (.doc)
                       </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
@@ -211,6 +288,19 @@ export const Navbar = ({ data }: NavbarProps) => {
                 </MenubarTrigger>
                 <MenubarContent>
                   <MenubarSub>
+                    <MenubarSubTrigger>Image</MenubarSubTrigger>
+                    <MenubarSubContent>
+                      <MenubarItem onClick={handleUpload}>
+                        <UploadIcon className="size-4 mr-2" />
+                        Upload Image
+                      </MenubarItem>
+                      <MenubarItem onClick={() => setIsDialogOpen(true)}>
+                        <SearchIcon className="size-4 mr-2" />
+                        Paste Image URL
+                      </MenubarItem>
+                    </MenubarSubContent>
+                  </MenubarSub>
+                  <MenubarSub>
                     <MenubarSubTrigger>Table</MenubarSubTrigger>
                     <MenubarSubContent>
                       <MenubarItem
@@ -232,6 +322,18 @@ export const Navbar = ({ data }: NavbarProps) => {
                         onClick={() => insertTable({ rows: 4, cols: 6 })}
                       >
                         4 x 6
+                      </MenubarItem>
+
+                      <MenubarSeparator />
+
+                      <MenubarItem
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCustomTableOpen(true);
+                        }}
+                        onSelect={(e) => e.preventDefault()}
+                      >
+                        Custom size…
                       </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
@@ -280,6 +382,22 @@ export const Navbar = ({ data }: NavbarProps) => {
                         <StrikethroughIcon className="size-4 mr-2" />
                         Strikethrough
                       </MenubarItem>
+                      <MenubarItem
+                        onClick={() =>
+                          editor?.chain().focus().toggleSubscript().run()
+                        }
+                      >
+                        <BsSubscript className="size-4 mr-2" />
+                        Subscript
+                      </MenubarItem>
+                      <MenubarItem
+                        onClick={() =>
+                          editor?.chain().focus().toggleSuperscript().run()
+                        }
+                      >
+                        <BsSuperscript className="size-4 mr-2" />
+                        Superscript
+                      </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
                   <MenubarItem
@@ -307,6 +425,60 @@ export const Navbar = ({ data }: NavbarProps) => {
         />
         <UserButton />
       </div>
+
+      <Dialog open={customTableOpen} onOpenChange={setCustomTableOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Insert custom table</DialogTitle>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-4 py-2">
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="rows">Rows</Label>
+              <Input
+                id="rows"
+                type="number"
+                min={1}
+                max={50}
+                value={customRows}
+                onChange={(e) => setCustomRows(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="cols">Columns</Label>
+              <Input
+                id="cols"
+                type="number"
+                min={1}
+                max={50}
+                value={customCols}
+                onChange={(e) => setCustomCols(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setCustomTableOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                const rows = Math.max(
+                  1,
+                  Math.min(50, parseInt(customRows) || 3),
+                );
+                const cols = Math.max(
+                  1,
+                  Math.min(50, parseInt(customCols) || 3),
+                );
+                insertTable({ rows, cols });
+                setCustomTableOpen(false);
+              }}
+            >
+              Insert
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <ImageDialog open={isDialogOpen} setOpen={setIsDialogOpen} />
     </nav>
   );
 };

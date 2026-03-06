@@ -271,6 +271,10 @@ body {
 
       > div {
         flex: 1 1 auto;
+        min-width: 0;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: pre-wrap;
       }
     }
 
@@ -312,4 +316,13 @@ body {
 
 div[data-radix-popper-content-wrapper] {
   z-index: 50 !important;
+}
+
+/* ─── Mobile scrollbar hiding for toolbar ─── */
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE / Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none; /* Chrome / Safari / Opera */
 }

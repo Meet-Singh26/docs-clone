@@ -36,6 +36,9 @@ import {
   MinusIcon,
   PlusIcon,
   ListCollapseIcon,
+  SubscriptIcon,
+  SuperscriptIcon,
+  StrikethroughIcon,
 } from "lucide-react";
 
 import {
@@ -49,18 +52,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ImageDialog } from "@/app/documents/[documentId]/img-dialog";
+import { useImageUpload } from "@/hooks/use-image-upload";
 
 const LineHeightButton = () => {
   const { editor } = useEditorStore();
@@ -74,9 +72,9 @@ const LineHeightButton = () => {
   ];
 
   return (
-    <Tooltip>
-      <TooltipTrigger>
-        <DropdownMenu>
+    <DropdownMenu>
+      <Tooltip>
+        <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Line Height"
@@ -85,27 +83,26 @@ const LineHeightButton = () => {
               <ListCollapseIcon className="size-4" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
-            {lineHeights.map(({ label, value }) => (
-              <button
-                key={value}
-                onClick={() =>
-                  editor?.chain().focus().setLineHeight(value).run()
-                }
-                className={cn(
-                  "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                  editor?.getAttributes("paragraph").lineHeight === value &&
-                    "bg-neutral-200/80",
-                )}
-              >
-                <span className="text-sm">{label}</span>
-              </button>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </TooltipTrigger>
-      <TooltipContent>Line Height</TooltipContent>
-    </Tooltip>
+        </TooltipTrigger>
+        <TooltipContent>Line Height</TooltipContent>
+
+        <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+          {lineHeights.map(({ label, value }) => (
+            <button
+              key={value}
+              onClick={() => editor?.chain().focus().setLineHeight(value).run()}
+              className={cn(
+                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+                editor?.getAttributes("paragraph").lineHeight === value &&
+                  "bg-neutral-200/80",
+              )}
+            >
+              <span className="text-sm">{label}</span>
+            </button>
+          ))}
+        </DropdownMenuContent>
+      </Tooltip>
+    </DropdownMenu>
   );
 };
 
@@ -194,14 +191,12 @@ export const FontSizeButton = () => {
   return (
     <div className="flex items-center gap-x-0.5">
       <Tooltip>
-        <TooltipTrigger>
-          <button
-            onClick={decrement}
-            aria-label="Decrease Font Size"
-            className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
-          >
-            <MinusIcon className="size-4" />
-          </button>
+        <TooltipTrigger
+          onClick={decrement}
+          aria-label="Decrease Font Size"
+          className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
+        >
+          <MinusIcon className="size-4" />
         </TooltipTrigger>
         <TooltipContent>Decrease Font Size</TooltipContent>
       </Tooltip>
@@ -227,14 +222,12 @@ export const FontSizeButton = () => {
         </button>
       )}
       <Tooltip>
-        <TooltipTrigger>
-          <button
-            onClick={increment}
-            aria-label="Increase Font Size"
-            className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
-          >
-            <PlusIcon className="size-4" />
-          </button>
+        <TooltipTrigger
+          onClick={increment}
+          aria-label="Increase Font Size"
+          className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
+        >
+          <PlusIcon className="size-4" />
         </TooltipTrigger>
         <TooltipContent>Increase Font Size</TooltipContent>
       </Tooltip>
@@ -261,9 +254,9 @@ const ListButton = () => {
   ];
 
   return (
-    <Tooltip>
-      <TooltipTrigger>
-        <DropdownMenu>
+    <DropdownMenu>
+      <Tooltip>
+        <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Lists"
@@ -272,25 +265,26 @@ const ListButton = () => {
               <ListIcon className="size-4" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
-            {lists.map(({ label, icon: Icon, onClick, isActive }) => (
-              <button
-                key={label}
-                onClick={onClick}
-                className={cn(
-                  "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                  isActive() && "bg-neutral-200/80",
-                )}
-              >
-                <Icon className="size-4" />
-                <span className="text-sm">{label}</span>
-              </button>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </TooltipTrigger>
-      <TooltipContent>Lists</TooltipContent>
-    </Tooltip>
+        </TooltipTrigger>
+        <TooltipContent>Lists</TooltipContent>
+
+        <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+          {lists.map(({ label, icon: Icon, onClick, isActive }) => (
+            <button
+              key={label}
+              onClick={onClick}
+              className={cn(
+                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+                isActive() && "bg-neutral-200/80",
+              )}
+            >
+              <Icon className="size-4" />
+              <span className="text-sm">{label}</span>
+            </button>
+          ))}
+        </DropdownMenuContent>
+      </Tooltip>
+    </DropdownMenu>
   );
 };
 
@@ -321,9 +315,9 @@ const AlignButton = () => {
   ];
 
   return (
-    <Tooltip>
-      <TooltipTrigger>
-        <DropdownMenu>
+    <DropdownMenu>
+      <Tooltip>
+        <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Text Alignment"
@@ -332,114 +326,67 @@ const AlignButton = () => {
               <AlignLeftIcon className="size-4" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
-            {alignments.map(({ label, value, icon: Icon }) => (
-              <button
-                key={value}
-                onClick={() =>
-                  editor?.chain().focus().setTextAlign(value).run()
-                }
-                className={cn(
-                  "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                  editor?.isActive({ textAlign: value }) && "bg-neutral-200/80",
-                )}
-              >
-                <Icon className="size-4" />
-                <span className="text-sm">{label}</span>
-              </button>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </TooltipTrigger>
-      <TooltipContent>Text Alignment</TooltipContent>
-    </Tooltip>
+        </TooltipTrigger>
+        <TooltipContent>Text Alignment</TooltipContent>
+
+        <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+          {alignments.map(({ label, value, icon: Icon }) => (
+            <button
+              key={value}
+              onClick={() => editor?.chain().focus().setTextAlign(value).run()}
+              className={cn(
+                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+                editor?.isActive({ textAlign: value }) && "bg-neutral-200/80",
+              )}
+            >
+              <Icon className="size-4" />
+              <span className="text-sm">{label}</span>
+            </button>
+          ))}
+        </DropdownMenuContent>
+      </Tooltip>
+    </DropdownMenu>
   );
 };
 
 const ImageButton = () => {
-  const { editor } = useEditorStore();
+  const { handleUpload } = useImageUpload();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
-
-  const onChange = (src: string) => {
-    editor?.chain().focus().setImage({ src }).run();
-  };
-
-  const onUpload = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-
-      if (file) {
-        const imageUrl = URL.createObjectURL(file);
-        onChange(imageUrl);
-      }
-    };
-
-    input.click();
-  };
-
-  const handleImageUrlSubmit = () => {
-    if (imageUrl) {
-      onChange(imageUrl);
-      setImageUrl("");
-      setIsDialogOpen(false);
-    }
-  };
 
   return (
-    <Tooltip>
-      <TooltipTrigger>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              aria-label="Insert Image"
-              className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
-            >
-              <ImageIcon className="size-4" />
-            </button>
-          </DropdownMenuTrigger>
+    <>
+      <DropdownMenu>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DropdownMenuTrigger asChild>
+              <button
+                aria-label="Insert Image"
+                className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+              >
+                <ImageIcon className="size-4" />
+              </button>
+            </DropdownMenuTrigger>
+          </TooltipTrigger>
+          <TooltipContent>Insert Image</TooltipContent>
+
           <DropdownMenuContent className="p-2.5 flex flex-col gap-x-2">
-            <DropdownMenuItem onClick={onUpload} className="cursor-pointer">
+            <DropdownMenuItem onClick={handleUpload} className="cursor-pointer">
               <UploadIcon className="size-4 mr-2" />
-              Upload
+              Upload Image
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => setIsDialogOpen(true)}
               className="cursor-pointer"
             >
               <SearchIcon className="size-4 mr-2" />
-              Paste image URL
+              Paste Image URL
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </Tooltip>
+      </DropdownMenu>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Insert image URL</DialogTitle>
-            </DialogHeader>
-            <Input
-              placeholder="Insert image URL"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleImageUrlSubmit();
-                }
-              }}
-            />
-            <DialogFooter>
-              <Button onClick={handleImageUrlSubmit}>Insert</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </TooltipTrigger>
-      <TooltipContent>Insert Image</TooltipContent>
-    </Tooltip>
+      <ImageDialog open={isDialogOpen} setOpen={setIsDialogOpen} />
+    </>
   );
 };
 
@@ -479,15 +426,15 @@ const LinkButton = () => {
   };
 
   return (
-    <Tooltip>
-      <TooltipTrigger>
-        <DropdownMenu
-          open={open}
-          onOpenChange={(isOpen) => {
-            setOpen(isOpen);
-            if (isOpen) setValue(getCurrentHref());
-          }}
-        >
+    <DropdownMenu
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (isOpen) setValue(getCurrentHref());
+      }}
+    >
+      <Tooltip>
+        <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Insert Link"
@@ -502,26 +449,26 @@ const LinkButton = () => {
               <Link2Icon className="size-4" />
             </button>
           </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>Insert Link</TooltipContent>
 
-          <DropdownMenuContent className="p-2.5 flex items-center gap-x-2">
-            <Input
-              autoFocus
-              placeholder="https://www.example.com"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  applyLink();
-                }
-              }}
-            />
-            <Button onClick={applyLink}>Apply</Button>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </TooltipTrigger>
-      <TooltipContent>Insert Link</TooltipContent>
-    </Tooltip>
+        <DropdownMenuContent className="p-2.5 flex items-center gap-x-2">
+          <Input
+            autoFocus
+            placeholder="https://www.example.com"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                applyLink();
+              }
+            }}
+          />
+          <Button onClick={applyLink}>Apply</Button>
+        </DropdownMenuContent>
+      </Tooltip>
+    </DropdownMenu>
   );
 };
 
@@ -535,9 +482,9 @@ const HighlightColorButton = () => {
   };
 
   return (
-    <Tooltip>
-      <TooltipTrigger>
-        <DropdownMenu>
+    <DropdownMenu>
+      <Tooltip>
+        <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Highlight Color"
@@ -550,13 +497,13 @@ const HighlightColorButton = () => {
               />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="p-0 border-0">
-            <SketchPicker color={value} onChange={onChange} />
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </TooltipTrigger>
-      <TooltipContent>Highlight</TooltipContent>
-    </Tooltip>
+        </TooltipTrigger>
+        <TooltipContent>Highlight</TooltipContent>
+        <DropdownMenuContent className="p-0 border-0">
+          <SketchPicker color={value} onChange={onChange} />
+        </DropdownMenuContent>{" "}
+      </Tooltip>
+    </DropdownMenu>
   );
 };
 
@@ -570,9 +517,9 @@ const TextColorButton = () => {
   };
 
   return (
-    <Tooltip>
-      <TooltipTrigger>
-        <DropdownMenu>
+    <DropdownMenu>
+      <Tooltip>
+        <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Text Color"
@@ -585,13 +532,14 @@ const TextColorButton = () => {
               />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="p-0 border-0">
-            <SketchPicker color={value} onChange={onChange} />
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </TooltipTrigger>
-      <TooltipContent>Text Color</TooltipContent>
-    </Tooltip>
+        </TooltipTrigger>
+        <TooltipContent>Text Color</TooltipContent>
+
+        <DropdownMenuContent className="p-0 border-0">
+          <SketchPicker color={value} onChange={onChange} />
+        </DropdownMenuContent>
+      </Tooltip>
+    </DropdownMenu>
   );
 };
 
@@ -718,19 +666,17 @@ const ToolbarButton = ({
 }: ToolbarButtonProps) => {
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <button
-          onClick={onClick}
-          aria-label={label}
-          className={cn(
-            "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80",
-            isActive && "bg-neutral-200/80",
-          )}
-        >
-          <Icon className="size-4" />
-        </button>
+      <TooltipTrigger
+        onClick={onClick}
+        aria-label={label}
+        className={cn(
+          "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80",
+          isActive && "bg-neutral-200/80",
+        )}
+      >
+        <Icon className="size-4" />
       </TooltipTrigger>
-      <TooltipContent>
+      <TooltipContent className="print:hidden">
         <p>{label}</p>
       </TooltipContent>
     </Tooltip>
@@ -765,6 +711,10 @@ export const Toolbar = () => {
       {
         label: "Spell Check",
         icon: SpellCheckIcon,
+        isActive:
+          editor?.view.dom.getAttribute("spellcheck") === "false"
+            ? false
+            : true,
         onClick: () => {
           const current = editor?.view.dom.getAttribute("spellcheck");
           editor?.view.dom.setAttribute(
@@ -793,6 +743,24 @@ export const Toolbar = () => {
         isActive: editor?.isActive("underline"),
         onClick: () => editor?.chain().focus().toggleUnderline().run(),
       },
+      {
+        label: "Strike Through",
+        icon: StrikethroughIcon,
+        isActive: editor?.isActive("strike"),
+        onClick: () => editor?.chain().focus().toggleStrike().run(),
+      },
+      {
+        label: "Subscript",
+        icon: SubscriptIcon,
+        isActive: editor?.isActive("subscript"),
+        onClick: () => editor?.chain().focus().toggleSubscript().run(),
+      },
+      {
+        label: "Superscript",
+        icon: SuperscriptIcon,
+        isActive: editor?.isActive("superscript"),
+        onClick: () => editor?.chain().focus().toggleSuperscript().run(),
+      },
     ],
     [
       {
@@ -811,14 +779,13 @@ export const Toolbar = () => {
         label: "Remove Formatting",
         icon: RemoveFormattingIcon,
         onClick: () => editor?.chain().focus().unsetAllMarks().run(),
-        isActive: editor?.isActive("taskList"),
       },
     ],
   ];
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="bg-[#F1F4F9] px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto">
+      <div className="bg-[#F1F4F9] px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto justify-center">
         {sections[0].map((item) => (
           <ToolbarButton key={item.label} {...item} />
         ))}

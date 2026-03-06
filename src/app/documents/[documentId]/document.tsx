@@ -1,6 +1,8 @@
 "use client";
 
 import { Preloaded, usePreloadedQuery } from "convex/react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 import { Room } from "./room";
 import { Editor } from "./editor";
@@ -13,7 +15,18 @@ interface DocumentProps {
 }
 
 export const Document = ({ preloadedDocument }: DocumentProps) => {
+  const router = useRouter();
   const document = usePreloadedQuery(preloadedDocument);
+
+  // When getById returns null (document deleted while we were viewing it)
+  // navigate back to home instead of letting the error bubble up.
+  useEffect(() => {
+    if (document === null) {
+      router.replace("/");
+    }
+  }, [document, router]);
+
+  if (!document) return null;
 
   return (
     <Room>

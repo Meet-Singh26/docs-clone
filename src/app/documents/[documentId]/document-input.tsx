@@ -35,7 +35,7 @@ export const DocumentInput = ({ title, id }: DocumentInputProps) => {
       .then(() => toast.success("Document updated"))
       .catch(() => toast.error("Sometimes went wrong"))
       .finally(() => setIsPending(false));
-  });
+  },1100);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
