@@ -84,7 +84,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
       attributes: {
         style: `padding-left: ${leftMargin}px; padding-right: ${rightMargin}px;`,
         class:
-          "tiptap focus:outline-none print:border-0 border bg-white border-editor-border flex flex-col min-h-[1054px] w-[816px] py-10 cursor-text",
+          "tiptap focus:outline-none print:border-0 border bg-white border-editor-border flex flex-col min-h-[1054px] w-full max-w-[816px] py-10 cursor-text",
       },
     },
     extensions: [
@@ -128,11 +128,11 @@ export const Editor = ({ initialContent }: EditorProps) => {
   });
 
   return (
-    <div className="size-full overflow-x-auto bg-editor-bg px-4 print:p-0 print:bg-white print:overflow-visible">
+    <div className="size-full overflow-x-auto bg-editor-bg px-2 sm:px-4 print:p-0 print:bg-white print:overflow-visible">
       <Ruler />
-      <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
+      <div className="flex justify-center w-full max-w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <TableToolbar editor={editor} />
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} className="w-full" />
         <Threads editor={editor} />
       </div>
     </div>

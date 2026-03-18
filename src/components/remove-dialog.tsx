@@ -19,6 +19,7 @@ import {
 import { Id } from "../../convex/_generated/dataModel";
 import { api } from "../../convex/_generated/api";
 import { useRouter } from "next/navigation";
+import { deleteLiveblocksRoom } from "@/app/actions/room";
 
 interface RemoveDialogProps {
   documentId: Id<"documents">;
@@ -48,18 +49,23 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
           </AlertDialogCancel>
           <AlertDialogAction
             disabled={isRemoving}
-            onClick={(e) => {
+            onClick={async(e) => {
               e.stopPropagation();
               setIsRemoving(true);
-              remove({ id: documentId })
-                .then(() => {
-                  toast.success("Document removed");
-                  router.replace("/");
-                })
-                .catch(() => toast.error("Something went wrong"))
-                .finally(() => {
-                  setIsRemoving(false);
-                });
+              try {
+                // 1. Await the Convex deletion Promise
+                await remove({ id: documentId });
+
+                // 2. Await the Liveblocks API fetch Promise to clear the room
+                await deleteLiveblocksRoom(documentId);
+
+                toast.success("Document deleted");
+                router.push("/");
+              } catch (error) {
+                toast.error("Failed to delete document");
+              } finally {
+                setIsRemoving(false);
+              }
             }}
           >
             Delete

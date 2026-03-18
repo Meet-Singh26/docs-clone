@@ -41,7 +41,6 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-
 import {
   Dialog,
   DialogContent,
@@ -54,7 +53,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 import { Avatars } from "./avatars";
-
 import { DocumentInput } from "./document-input";
 import { useEditorStore } from "@/store/use-editor-store";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
@@ -85,10 +83,7 @@ export const Navbar = ({ data }: NavbarProps) => {
 
   const mutation = useMutation(api.documents.create);
   const onNewDocument = () => {
-    mutation({
-      title: "Untitled Document",
-      initialContent: "",
-    })
+    mutation({ title: "Untitled Document", initialContent: "" })
       .then((id) => {
         toast.success("Document created");
         router.push(`/documents/${id}`);
@@ -115,40 +110,33 @@ export const Navbar = ({ data }: NavbarProps) => {
 
   const onSaveJson = () => {
     if (!editor) return;
-
-    const content = editor.getJSON();
-    const blob = new Blob([JSON.stringify(content)], {
-      type: "application/json",
-    });
-    onDownload(blob, `${data.title}.json`);
+    onDownload(
+      new Blob([JSON.stringify(editor.getJSON())], {
+        type: "application/json",
+      }),
+      `${data.title}.json`,
+    );
   };
 
   const onSaveHTML = () => {
     if (!editor) return;
-
-    const content = editor.getHTML();
-    const blob = new Blob([content], {
-      type: "text/html",
-    });
-    onDownload(blob, `${data.title}.html`);
+    onDownload(
+      new Blob([editor.getHTML()], { type: "text/html" }),
+      `${data.title}.html`,
+    );
   };
 
   const onSaveText = () => {
     if (!editor) return;
-
-    const content = editor.getText();
-    const blob = new Blob([content], {
-      type: "text/plain",
-    });
-    onDownload(blob, `${data.title}.txt`);
+    onDownload(
+      new Blob([editor.getText()], { type: "text/plain" }),
+      `${data.title}.txt`,
+    );
   };
 
   const onSaveWord = () => {
     if (!editor) return;
-
     const html = editor.getHTML();
-
-    // Basic inline styles so the Word document looks reasonable out of the box
     const styles = `
       <style>
         body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; margin: 1in; }
@@ -160,31 +148,13 @@ export const Navbar = ({ data }: NavbarProps) => {
         th { background-color: #c7c7c7; font-weight: bold; }
         ul { list-style-type: disc; }
         ol { list-style-type: decimal; }
-      </style>
-    `;
-
-    const wordHtml = `
-      <html xmlns:o="urn:schemas-microsoft-com:office:office"
-            xmlns:w="urn:schemas-microsoft-com:office:word"
-            xmlns="http://www.w3.org/TR/REC-html40">
-        <head>
-          <meta charset="utf-8">
-          <title>${data.title}</title>
-          <!--[if gte mso 9]>
-            <xml>
-              <w:WordDocument>
-                <w:View>Print</w:View>
-                <w:Zoom>100</w:Zoom>
-              </w:WordDocument>
-            </xml>
-          <![endif]-->
-          ${styles}
-        </head>
-        <body>${html}</body>
-      </html>
-    `;
-
-    // BOM prefix ensures Word reads UTF-8 correctly
+      </style>`;
+    const wordHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+      <head><meta charset="utf-8"><title>${data.title}</title>
+      <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+      ${styles}</head><body>${html}</body></html>`;
     onDownload(
       new Blob(["﻿", wordHtml], { type: "application/msword" }),
       `${data.title}.doc`,
@@ -201,6 +171,7 @@ export const Navbar = ({ data }: NavbarProps) => {
           <DocumentInput title={data.title} id={data._id} />
           <div className="flex">
             <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
+              {/* ── File ── */}
               <MenubarMenu>
                 <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
                   File
@@ -208,7 +179,8 @@ export const Navbar = ({ data }: NavbarProps) => {
                 <MenubarContent className="print:hidden">
                   <MenubarSub>
                     <MenubarSubTrigger>
-                      <FileIcon className="size-4 mr-2" /> Save
+                      <FileIcon className="size-4 mr-2" />
+                      Save
                     </MenubarSubTrigger>
                     <MenubarSubContent>
                       <MenubarItem onClick={onSaveJson}>
@@ -259,10 +231,12 @@ export const Navbar = ({ data }: NavbarProps) => {
                   <MenubarSeparator />
                   <MenubarItem onClick={() => window.print()}>
                     <PrinterIcon className="mr-2 size-4" />
-                    Print <MenubarShortcut>CTRL + P</MenubarShortcut>
+                    Print<MenubarShortcut>CTRL + P</MenubarShortcut>
                   </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
+
+              {/* ── Edit ── */}
               <MenubarMenu>
                 <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
                   Edit
@@ -272,16 +246,18 @@ export const Navbar = ({ data }: NavbarProps) => {
                     onClick={() => editor?.chain().focus().undo().run()}
                   >
                     <Undo2Icon className="mr-2 size-4" />
-                    Undo <MenubarShortcut>CTRL + Z</MenubarShortcut>
+                    Undo<MenubarShortcut>CTRL + Z</MenubarShortcut>
                   </MenubarItem>
                   <MenubarItem
                     onClick={() => editor?.chain().focus().redo().run()}
                   >
                     <Redo2Icon className="mr-2 size-4" />
-                    Redo <MenubarShortcut>CTRL + Y</MenubarShortcut>
+                    Redo<MenubarShortcut>CTRL + Y</MenubarShortcut>
                   </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
+
+              {/* ── Insert ── */}
               <MenubarMenu>
                 <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
                   Insert
@@ -323,9 +299,7 @@ export const Navbar = ({ data }: NavbarProps) => {
                       >
                         4 x 6
                       </MenubarItem>
-
                       <MenubarSeparator />
-
                       <MenubarItem
                         onClick={(e) => {
                           e.preventDefault();
@@ -339,6 +313,8 @@ export const Navbar = ({ data }: NavbarProps) => {
                   </MenubarSub>
                 </MenubarContent>
               </MenubarMenu>
+
+              {/* ── Format ── */}
               <MenubarMenu>
                 <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
                   Format
@@ -414,6 +390,8 @@ export const Navbar = ({ data }: NavbarProps) => {
           </div>
         </div>
       </div>
+
+      {/* Right side — avatars, inbox, org, user */}
       <div className="flex gap-3 items-center pl-6">
         <Avatars />
         <Inbox />
@@ -426,6 +404,7 @@ export const Navbar = ({ data }: NavbarProps) => {
         <UserButton />
       </div>
 
+      {/* ── Custom table size dialog ── */}
       <Dialog open={customTableOpen} onOpenChange={setCustomTableOpen}>
         <DialogContent>
           <DialogHeader>

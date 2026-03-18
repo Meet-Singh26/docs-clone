@@ -14,8 +14,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Docs",
-  description: "Google Docs replica project",
+  title: "Docs Clone",
+  description: "A collaborative document editor",
 };
 
 export default function RootLayout({
