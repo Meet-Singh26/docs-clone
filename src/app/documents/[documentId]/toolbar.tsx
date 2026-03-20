@@ -78,7 +78,7 @@ const LineHeightButton = () => {
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Line Height"
-              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm"
             >
               <ListCollapseIcon className="size-4" />
             </button>
@@ -92,7 +92,7 @@ const LineHeightButton = () => {
               key={value}
               onClick={() => editor?.chain().focus().setLineHeight(value).run()}
               className={cn(
-                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80",
                 editor?.getAttributes("paragraph").lineHeight === value &&
                   "bg-neutral-200/80",
               )}
@@ -194,7 +194,7 @@ export const FontSizeButton = () => {
         <TooltipTrigger
           onClick={decrement}
           aria-label="Decrease Font Size"
-          className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
+          className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80"
         >
           <MinusIcon className="size-4" />
         </TooltipTrigger>
@@ -225,7 +225,7 @@ export const FontSizeButton = () => {
         <TooltipTrigger
           onClick={increment}
           aria-label="Increase Font Size"
-          className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
+          className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80"
         >
           <PlusIcon className="size-4" />
         </TooltipTrigger>
@@ -260,7 +260,7 @@ const ListButton = () => {
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Lists"
-              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm"
             >
               <ListIcon className="size-4" />
             </button>
@@ -274,7 +274,7 @@ const ListButton = () => {
               key={label}
               onClick={onClick}
               className={cn(
-                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80",
                 isActive() && "bg-neutral-200/80",
               )}
             >
@@ -321,7 +321,7 @@ const AlignButton = () => {
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Text Alignment"
-              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm"
             >
               <AlignLeftIcon className="size-4" />
             </button>
@@ -335,7 +335,7 @@ const AlignButton = () => {
               key={value}
               onClick={() => editor?.chain().focus().setTextAlign(value).run()}
               className={cn(
-                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80",
                 editor?.isActive({ textAlign: value }) && "bg-neutral-200/80",
               )}
             >
@@ -361,7 +361,7 @@ const ImageButton = () => {
             <DropdownMenuTrigger asChild>
               <button
                 aria-label="Insert Image"
-                className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm"
               >
                 <ImageIcon className="size-4" />
               </button>
@@ -443,7 +443,7 @@ const LinkButton = () => {
             ${
               editor.isActive("link")
                 ? "bg-neutral-200"
-                : "hover:bg-neutral-200/80"
+                : "hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80"
             }`}
             >
               <Link2Icon className="size-4" />
@@ -488,7 +488,7 @@ const HighlightColorButton = () => {
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Highlight Color"
-              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm"
             >
               <HighlighterIcon className="size-4" />
               <div
@@ -523,7 +523,7 @@ const TextColorButton = () => {
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Text Color"
-              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+              className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm"
             >
               <span className="text-xs">A</span>
               <div
@@ -568,7 +568,7 @@ const HeadingLevelButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+        <button className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm">
           <span className="truncate">{getCurrentHeading()}</span>
           <ChevronDownIcon className="ml-2 size-4 shrink-0" />
         </button>
@@ -579,7 +579,7 @@ const HeadingLevelButton = () => {
             key={value}
             style={{ fontSize }}
             className={cn(
-              "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+              "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80",
               (value === 0 && !editor?.isActive("heading")) ||
                 (editor?.isActive("heading", { level: value as Level }) &&
                   "bg-neutral-200/80"),
@@ -624,7 +624,7 @@ export const FontFamilyButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="h-7 w-[120px] shrink-0 flex items-center justify-between rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+        <button className="h-7 w-[120px] shrink-0 flex items-center justify-between rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm">
           <span className="truncate">
             {editor?.getAttributes("textStyle").fontFamily || "Arial"}
           </span>
@@ -637,7 +637,7 @@ export const FontFamilyButton = () => {
             onClick={() => editor?.chain().focus().setFontFamily(value).run()}
             key={value}
             className={cn(
-              "flex items-center gap-x-2 px-2 py-1 font-[value] rounded-sm hover:bg-neutral-200/80",
+              "flex items-center gap-x-2 px-2 py-1 font-[value] rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80",
               editor?.getAttributes("textStyle").fontFamily === value &&
                 "bg-neutral-200/80",
             )}
@@ -670,7 +670,7 @@ const ToolbarButton = ({
         onClick={onClick}
         aria-label={label}
         className={cn(
-          "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80",
+          "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80",
           isActive && "bg-neutral-200/80",
         )}
       >
@@ -785,23 +785,23 @@ export const Toolbar = () => {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="bg-[#F1F4F9] px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto justify-center hide-scrollbar flex-nowrap">
+      <div className="bg-[#F1F4F9] dark:bg-neutral-800 px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto justify-center hide-scrollbar flex-nowrap">
         {sections[0].map((item) => (
           <ToolbarButton key={item.label} {...item} />
         ))}
-        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
         <FontFamilyButton />
-        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
         <HeadingLevelButton />
-        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
         <FontSizeButton />
-        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
         {sections[1].map((item) => (
           <ToolbarButton key={item.label} {...item} />
         ))}
         <TextColorButton />
         <HighlightColorButton />
-        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
         <LinkButton />
         <ImageButton />
         <AlignButton />

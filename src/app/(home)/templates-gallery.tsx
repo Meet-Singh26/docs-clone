@@ -35,7 +35,7 @@ export const TemplatesGallery = () => {
   };
 
   return (
-    <div className="bg-[#F1F3F4]">
+    <div className="bg-[#F1F3F4] dark:bg-neutral-900">
       <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-y-4">
         <h3 className="font-medium">Start a new document</h3>
         <Carousel>
@@ -61,7 +61,7 @@ export const TemplatesGallery = () => {
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
                     }}
-                    className="size-full hover:border-blue-500 rounded-sm border hover:bg-blue-50 transition flex flex-col items-center justify-center gap-y-4 bg-white"
+                    className="size-full hover:border-blue-500 rounded-sm border hover:bg-blue-50 dark:hover:bg-blue-950 transition flex flex-col items-center justify-center gap-y-4 bg-white dark:bg-neutral-800"
                   />
                   <p className="text-sm font-medium truncate">{template.label}</p>
                 </div>

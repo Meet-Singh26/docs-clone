@@ -8,6 +8,7 @@ import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,14 +25,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ConvexClientProvider>
-          <NuqsAdapter>
-            <Toaster />
-            {children}
-          </NuqsAdapter>
-        </ConvexClientProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ConvexClientProvider>
+            <NuqsAdapter>
+              <Toaster />
+              {children}
+            </NuqsAdapter>
+          </ConvexClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

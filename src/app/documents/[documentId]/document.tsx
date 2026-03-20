@@ -32,7 +32,7 @@ export const Document = ({ preloadedDocument }: DocumentProps) => {
   return (
     <Room>
       <div className="min-h-screen bg-editor-bg">
-        <div className="flex flex-col px-4 pt-2 gap-y-2 fixed top-0 left-0 right-0 z-10 bg-[#FAFBFD] print:hidden h-auto min-h-[112px] shadow-sm overflow-x-auto">
+        <div className="flex flex-col px-4 pt-2 gap-y-2 fixed top-0 left-0 right-0 z-10 bg-[#FAFBFD] dark:bg-neutral-900 print:hidden h-auto min-h-[112px] shadow-sm overflow-x-auto">
           <Navbar data={document} />
           <Toolbar />
         </div>

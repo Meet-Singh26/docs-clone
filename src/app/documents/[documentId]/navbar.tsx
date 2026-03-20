@@ -65,6 +65,7 @@ import { toast } from "sonner";
 import { RemoveDialog } from "@/components/remove-dialog";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { ImageDialog } from "./img-dialog";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 interface NavbarProps {
   data: Doc<"documents">;
@@ -395,6 +396,7 @@ export const Navbar = ({ data }: NavbarProps) => {
       <div className="flex gap-3 items-center pl-6">
         <Avatars />
         <Inbox />
+        <ThemeSwitcher />
         <OrganizationSwitcher
           afterCreateOrganizationUrl="/"
           afterLeaveOrganizationUrl="/"

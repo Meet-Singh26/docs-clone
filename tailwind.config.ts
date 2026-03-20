@@ -61,8 +61,8 @@ export default {
   				ring: 'hsl(var(--sidebar-ring))'
   			},
   			editor: {
-  				bg: '#FAFBFD',
-  				border: '#C7C7C7'
+  				bg: 'hsl(var(--editor-bg))',
+  				border: 'hsl(var(--editor-border))'
   			}
   		},
   		borderRadius: {

@@ -69,7 +69,7 @@ export const DocumentInput = ({ title, id }: DocumentInputProps) => {
             value={value}
             onChange={onChange}
             onBlur={() => setIsEditing(false)}
-            className="absolute inset-0 text-lg text-black px-1.5 bg-transparent truncate"
+            className="absolute inset-0 text-lg text-black dark:text-white px-1.5 bg-transparent truncate"
           />
         </form>
       ) : (

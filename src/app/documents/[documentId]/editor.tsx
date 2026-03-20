@@ -84,7 +84,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
       attributes: {
         style: `padding-left: ${leftMargin}px; padding-right: ${rightMargin}px;`,
         class:
-          "tiptap focus:outline-none print:border-0 border bg-white border-editor-border flex flex-col min-h-[1054px] w-full max-w-[816px] py-10 cursor-text",
+          "tiptap focus:outline-none print:border-0 border bg-white dark:bg-editor-bg border-editor-border flex flex-col min-h-[1054px] w-full max-w-[816px] py-10 cursor-text",
       },
     },
     extensions: [

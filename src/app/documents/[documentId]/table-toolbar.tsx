@@ -100,7 +100,7 @@ export const TableToolbar = ({ editor }: TableToolbarProps) => {
       }}
     >
       <TooltipProvider delayDuration={300}>
-        <div className="grid grid-cols-3 items-center gap-0.5 bg-white border border-neutral-200 rounded-lg shadow-xl p-1 max-w-[90vw]">
+        <div className="grid grid-cols-3 items-center gap-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl p-1 max-w-[90vw]">
           {actions.map((action, i) => (
             <Tooltip key={action.label}>
               {/* FIX: TooltipTrigger IS the button — avoids nested <button> */}
@@ -111,8 +111,8 @@ export const TableToolbar = ({ editor }: TableToolbarProps) => {
                   "h-7 px-2 text-xs font-medium rounded-md whitespace-nowrap transition-colors",
                   "disabled:opacity-40 disabled:pointer-events-none",
                   action.danger
-                    ? "hover:bg-red-50 hover:text-red-600 text-neutral-600"
-                    : "hover:bg-neutral-100 text-neutral-700",
+                    ? "hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 text-neutral-600 dark:text-neutral-400"
+                    : "hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300",
                 )}
               >
                 {action.shortLabel}
