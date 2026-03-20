@@ -128,11 +128,13 @@ export const Editor = ({ initialContent }: EditorProps) => {
   });
 
   return (
-    <div className="size-full overflow-x-auto bg-editor-bg px-2 sm:px-4 print:p-0 print:bg-white print:overflow-visible">
-      <Ruler />
-      <div className="flex justify-center w-full max-w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
+    <div className="flex flex-col items-center w-full max-w-[816px] mx-auto">
+      <div className="w-full overflow-x-auto hide-scrollbar">
+        <Ruler />
+      </div>
+      <div className="flex justify-center w-full py-4 print:py-0 print:w-full print:min-w-0 relative">
         <TableToolbar editor={editor} />
-        <EditorContent editor={editor} className="w-full" />
+        <EditorContent editor={editor} className="w-full max-w-[816px]" />
         <Threads editor={editor} />
       </div>
     </div>

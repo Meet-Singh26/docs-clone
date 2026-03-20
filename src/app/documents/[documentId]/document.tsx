@@ -9,6 +9,7 @@ import { Editor } from "./editor";
 import { Navbar } from "./navbar";
 import { Toolbar } from "./toolbar";
 import { api } from "../../../../convex/_generated/api";
+import { AiAssistant } from "@/components/ai-assistant";
 
 interface DocumentProps {
   preloadedDocument: Preloaded<typeof api.documents.getById>;
@@ -39,6 +40,8 @@ export const Document = ({ preloadedDocument }: DocumentProps) => {
           <Editor initialContent={document.initialContent} />
         </div>
       </div>
+      {/* Mount the AI Assistant floating widget */}
+      <AiAssistant />
     </Room>
   );
 };
