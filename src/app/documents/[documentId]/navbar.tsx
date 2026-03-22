@@ -170,7 +170,7 @@ export const Navbar = ({ data }: NavbarProps) => {
         </Link>
         <div className="flex flex-col">
           <DocumentInput title={data.title} id={data._id} />
-          <div className="flex">
+          <div className="flex overflow-x-auto scrollbar-none">
             <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
               {/* ── File ── */}
               <MenubarMenu>
@@ -393,16 +393,20 @@ export const Navbar = ({ data }: NavbarProps) => {
       </div>
 
       {/* Right side — avatars, inbox, org, user */}
-      <div className="flex gap-3 items-center pl-6">
-        <Avatars />
+      <div className="flex gap-3 items-center pl-6 shrink-0">
+        <div className="hidden sm:block">
+          <Avatars />
+        </div>
         <Inbox />
         <ThemeSwitcher />
-        <OrganizationSwitcher
-          afterCreateOrganizationUrl="/"
-          afterLeaveOrganizationUrl="/"
-          afterSelectOrganizationUrl="/"
-          afterSelectPersonalUrl="/"
-        />
+        <div className="hidden sm:block">
+          <OrganizationSwitcher
+            afterCreateOrganizationUrl="/"
+            afterLeaveOrganizationUrl="/"
+            afterSelectOrganizationUrl="/"
+            afterSelectPersonalUrl="/"
+          />
+        </div>
         <UserButton />
       </div>
 

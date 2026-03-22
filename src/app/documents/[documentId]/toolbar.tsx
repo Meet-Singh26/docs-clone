@@ -59,6 +59,7 @@ import {
 } from "@/components/ui/tooltip";
 import { ImageDialog } from "@/app/documents/[documentId]/img-dialog";
 import { useImageUpload } from "@/hooks/use-image-upload";
+import { useTheme } from "next-themes";
 
 const LineHeightButton = () => {
   const { editor } = useEditorStore();
@@ -473,9 +474,12 @@ const LinkButton = () => {
 };
 
 const HighlightColorButton = () => {
+  const { resolvedTheme } = useTheme();
   const { editor } = useEditorStore();
 
-  const value = editor?.getAttributes("highlight").color || "#FFFFFF";
+  const value =
+    editor?.getAttributes("highlight").color ||
+    (resolvedTheme === "dark" ? "#000000" : "#FFFFFF");
 
   const onChange = (color: ColorResult) => {
     editor?.chain().focus().setHighlight({ color: color.hex }).run();
@@ -501,16 +505,19 @@ const HighlightColorButton = () => {
         <TooltipContent>Highlight</TooltipContent>
         <DropdownMenuContent className="p-0 border-0">
           <SketchPicker color={value} onChange={onChange} />
-        </DropdownMenuContent>{" "}
+        </DropdownMenuContent>
       </Tooltip>
     </DropdownMenu>
   );
 };
 
 const TextColorButton = () => {
+  const { resolvedTheme } = useTheme();
   const { editor } = useEditorStore();
 
-  const value = editor?.getAttributes("textStyle").color || "#000000";
+  const value =
+    editor?.getAttributes("textStyle").color ||
+    (resolvedTheme === "dark" ? "#FFFFFF" : "#000000");
 
   const onChange = (color: ColorResult) => {
     editor?.chain().focus().setColor(color.hex).run();
@@ -785,23 +792,38 @@ export const Toolbar = () => {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="bg-[#F1F4F9] dark:bg-neutral-800 px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto justify-center hide-scrollbar flex-nowrap">
+      <div className="bg-[#F1F4F9] dark:bg-neutral-800 px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto scrollbar-none hide-scrollbar flex-nowrap">
         {sections[0].map((item) => (
           <ToolbarButton key={item.label} {...item} />
         ))}
-        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
+        <Separator
+          orientation="vertical"
+          className="h-6 bg-neutral-300 dark:bg-neutral-600"
+        />
         <FontFamilyButton />
-        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
+        <Separator
+          orientation="vertical"
+          className="h-6 bg-neutral-300 dark:bg-neutral-600"
+        />
         <HeadingLevelButton />
-        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
+        <Separator
+          orientation="vertical"
+          className="h-6 bg-neutral-300 dark:bg-neutral-600"
+        />
         <FontSizeButton />
-        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
+        <Separator
+          orientation="vertical"
+          className="h-6 bg-neutral-300 dark:bg-neutral-600"
+        />
         {sections[1].map((item) => (
           <ToolbarButton key={item.label} {...item} />
         ))}
         <TextColorButton />
         <HighlightColorButton />
-        <Separator orientation="vertical" className="h-6 bg-neutral-300 dark:bg-neutral-600" />
+        <Separator
+          orientation="vertical"
+          className="h-6 bg-neutral-300 dark:bg-neutral-600"
+        />
         <LinkButton />
         <ImageButton />
         <AlignButton />

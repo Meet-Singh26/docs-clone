@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.5.1",
+    "@clerk/ui": "^1.2.3",
     "@hookform/resolvers": "^3.9.1",
     "@liveblocks/client": "^2.12.2",
     "@liveblocks/node": "^2.12.2",
