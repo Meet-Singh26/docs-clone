@@ -11,7 +11,7 @@ export const Navbar = () => {
         <Link href="/">
           <Image src={"/logo.svg"} alt="Logo" width={36} height={36} />
         </Link>
-        <h3 className="text-xl hidden sm:block">Docs</h3>
+        <h3 className="text-xl hidden sm:block">NexDocs</h3>
       </div>
       <div className="hidden md:flex flex-1">
         <SearchInput />

@@ -94,7 +94,7 @@ export const AiAssistant = () => {
                 width={35}
                 alt="AI Logo"
               />
-              Docs AI
+              NexDocs AI
             </div>
             <div>
               <button
