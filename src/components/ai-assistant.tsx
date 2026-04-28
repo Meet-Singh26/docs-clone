@@ -58,7 +58,7 @@ export const AiAssistant = () => {
       let data;
       try {
         data = JSON.parse(textResponse);
-      } catch (parseError) {
+      } catch {
         console.error("Server returned non-JSON:", textResponse);
         setResponse(
           "Error: The server returned an invalid format (likely an HTML error page or Auth redirect). Check your server console.",

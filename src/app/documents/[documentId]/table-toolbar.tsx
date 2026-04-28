@@ -101,7 +101,7 @@ export const TableToolbar = ({ editor }: TableToolbarProps) => {
     >
       <TooltipProvider delayDuration={300}>
         <div className="grid grid-cols-3 items-center gap-0.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl p-1 max-w-[90vw]">
-          {actions.map((action, i) => (
+          {actions.map((action) => (
             <Tooltip key={action.label}>
               {/* FIX: TooltipTrigger IS the button — avoids nested <button> */}
               <TooltipTrigger

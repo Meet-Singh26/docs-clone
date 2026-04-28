@@ -61,7 +61,7 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
 
                 toast.success("Document deleted");
                 router.push("/");
-              } catch (error) {
+              } catch {
                 toast.error("Failed to delete document");
               } finally {
                 setIsRemoving(false);
