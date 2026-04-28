@@ -9,32 +9,32 @@ const liveblocks = new Liveblocks({
 });
 
 export async function POST(req: Request) {
-  const { sessionClaims } = await auth();
+  const { userId, orgId } = await auth();
 
-  if (!sessionClaims) {
-    return new Response("Unauthorized", { status: 401 });
+  if (!userId) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
   const user = await currentUser();
 
   if (!user) {
-    return new Response("Unauthorized", { status: 401 });
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
   const { room } = await req.json();
   const document = await convex.query(api.documents.getById, { id: room });
 
   if (!document) {
-    return new Response("Unauthorized", { status: 401 });
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
   const isOwner = document.ownerId === user.id;
   const isOrganizationMember = !!(
-    document.organizationId && document.organizationId === sessionClaims.org_id
+    document.organizationId && document.organizationId === orgId
   );
 
   if (!isOwner && !isOrganizationMember) {
-    return new Response("Unauthorized", { status: 401 });
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
   const name = user.fullName ?? user.primaryEmailAddress?.emailAddress ?? "Anonymous";
